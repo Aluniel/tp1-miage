@@ -11,28 +11,50 @@ import com.acme.mailreader.model.Mail;
  *
  */
 public class MailComparator implements Comparator<Mail> {
+	
+	public final int INFERIEUR = -1;
+	public final int EGAUX 	   = 0;
+	public final int SUPERIEUR = 1;
 
 	public int compare(Mail obj1, Mail obj2) {
-		if (obj1 == null || obj2 == null) {
-			return 0;
+		if (unDesMailsEstNull(obj1, obj2)) {
+			return EGAUX;
 		}
-		if (obj1.isImportant() != obj2.isImportant()) {
-			if (obj1.isImportant() && !obj2.isImportant()) {
-				return -1;
-			} else {
-				return 1;
-			}
+		if (leMail1EstPlusImportantQueLeMail2(obj1, obj2)) {
+			return INFERIEUR;
+		} else if(leMail2EstPlusImportantQueLeMail2(obj1, obj2)) {
+			return SUPERIEUR;
 		}
-		if (obj1.getStatut() != obj2.getStatut()) {
-			int comp = obj1.getStatut().ordinal()
-					- obj2.getStatut().ordinal();
-			return comp > 0 ? -1 : 1;
+		if (statutsDifferent(obj1, obj2)) {
+			return statutDuPremierMailSuperieur(obj1, obj2) ? INFERIEUR : SUPERIEUR;
 		}
-		if (obj1.getSujet() != obj2.getSujet()) {
+		if (sujetsDifferents(obj1, obj2)) {
 			return obj2.getSujet().compareTo(obj1.getSujet());
 		}
 		return obj2.getDate().compareTo(obj1.getDate());
 	}
-	
 
+	private boolean sujetsDifferents(Mail obj1, Mail obj2) {
+		return obj1.getSujet() != obj2.getSujet();
+	}
+
+	private boolean statutsDifferent(Mail obj1, Mail obj2) {
+		return obj1.getStatut() != obj2.getStatut();
+	}
+
+	private boolean statutDuPremierMailSuperieur(Mail obj1, Mail obj2) {
+		return obj1.getStatut().ordinal() - obj2.getStatut().ordinal() > 0;
+	}
+	
+	private boolean unDesMailsEstNull(Mail obj1, Mail obj2) {
+		return obj1 == null || obj2 == null;
+	}
+	
+	private boolean leMail1EstPlusImportantQueLeMail2(Mail obj1, Mail obj2) {
+		return obj1.isImportant() && !obj2.isImportant();
+	}
+	
+	private boolean leMail2EstPlusImportantQueLeMail2(Mail obj1, Mail obj2) {
+		return !obj1.isImportant() && obj2.isImportant();
+	}
 }

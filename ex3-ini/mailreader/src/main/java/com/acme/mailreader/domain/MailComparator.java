@@ -45,7 +45,7 @@ public class MailComparator implements Comparator<Mail> {
 	}
 
 	private int trierParSujet(Mail mail1, Mail mail2) {
-		return mail1.getSujet().compareTo(mail2.getSujet());
+		return mail2.getSujet().compareTo(mail1.getSujet());
 	}
 
 	private boolean unDesMailsNul(Mail mail1, Mail mail2) {

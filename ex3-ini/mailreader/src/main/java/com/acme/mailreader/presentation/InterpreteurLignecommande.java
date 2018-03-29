@@ -3,18 +3,22 @@ package com.acme.mailreader.presentation;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
+
 import com.acme.mailreader.domain.Mail;
 import com.acme.mailreader.service.MailService;
 import com.acme.mailreader.utils.MailInvalideException;
 
 public class InterpreteurLignecommande {
 	
-	//TODO : injecter un serviceMail par constructeur
 	private MailService serviceMail;
 	
-	
-	public InterpreteurLignecommande() {
+	// Arbre de dépendance :
+	// InterpreteurLigneCommande <--- MailService <--- MailSender 
+	@Inject
+	public InterpreteurLignecommande(MailService service) {
 		super();
+		serviceMail = service;
 	}
 	
 	/**
